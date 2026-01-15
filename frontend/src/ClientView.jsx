@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import './ClientView.css'
 
-const API_URL = 'http://localhost:3001/api/pedidos';
+// En Electron, el backend siempre corre en localhost:3001
+const API_URL = 'http://127.0.0.1:3001/api/pedidos';
 
 function ClientView() {
   const [pedidos, setPedidos] = useState([]);

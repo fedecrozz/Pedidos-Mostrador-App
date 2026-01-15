@@ -1,6 +1,7 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
+const path = require('path');
 const app = express();
 const PORT = 3001;
 
@@ -8,11 +9,31 @@ app.use(cors());
 app.use(express.json());
 
 // Conexión a la base de datos
-const db = new sqlite3.Database('../pedidos.db', (err) => {
+// En producción (empaquetado), la base de datos está en la raíz del proyecto
+// En desarrollo, está un nivel arriba del backend
+const dbPath = path.join(__dirname, '..', 'pedidos.db');
+console.log('Intentando conectar a la base de datos en:', dbPath);
+
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Error al conectar a la base de datos:', err.message);
   } else {
-    console.log('Conectado a la base de datos SQLite.');
+    console.log('Conectado a la base de datos SQLite en:', dbPath);
+    
+    // Crear la tabla si no existe
+    db.run(`CREATE TABLE IF NOT EXISTS pedidos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      numero_pedido TEXT NOT NULL,
+      nombre_cliente TEXT NOT NULL,
+      estado TEXT NOT NULL,
+      fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`, (err) => {
+      if (err) {
+        console.error('Error al crear la tabla pedidos:', err.message);
+      } else {
+        console.log('Tabla pedidos verificada/creada correctamente');
+      }
+    });
   }
 });
 

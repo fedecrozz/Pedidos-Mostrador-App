@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import './AdminView.css'
 
-const API_URL = 'http://localhost:3001/api/pedidos';
+// En Electron, el backend siempre corre en localhost:3001
+const API_URL = 'http://127.0.0.1:3001/api/pedidos';
 
 function AdminView() {
   const [pedidos, setPedidos] = useState([]);
@@ -27,7 +28,7 @@ function AdminView() {
 
   const obtenerSiguienteNumero = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/pedidos/ultimo-numero');
+      const response = await fetch('http://127.0.0.1:3001/api/pedidos/ultimo-numero');
       const data = await response.json();
       setNumeroPedido(data.siguienteNumero.toString());
     } catch (error) {

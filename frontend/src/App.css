@@ -45,6 +45,9 @@
   transition: all 0.3s;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border: 3px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
 }
 
 .home-btn:hover {

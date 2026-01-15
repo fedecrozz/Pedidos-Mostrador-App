@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import AdminView from './AdminView'
 import ClientView from './ClientView'
 import ClientView2 from './ClientView2'
@@ -18,6 +18,11 @@ function App() {
 }
 
 function Home() {
+  const openNewWindow = (path) => {
+    // Abrir en una nueva ventana usando window.open
+    window.open(`${window.location.origin}${window.location.pathname}#${path}`, '_blank', 'width=1200,height=800');
+  };
+
   return (
     <div className="home">
       <div className="home-container">
@@ -29,16 +34,16 @@ function Home() {
             <span className="btn-text">Administración</span>
             <span className="btn-desc">Crear y gestionar pedidos</span>
           </Link>
-          <Link to="/cliente" className="home-btn client-btn">
-            <span className="btn-icon">�</span>
+          <button onClick={() => openNewWindow('/cliente')} className="home-btn client-btn">
+            <span className="btn-icon">📊</span>
             <span className="btn-text">Vista Cliente (Tabla)</span>
             <span className="btn-desc">Consultar estado de pedidos</span>
-          </Link>
-          <Link to="/cliente2" className="home-btn client-btn">
+          </button>
+          <button onClick={() => openNewWindow('/cliente2')} className="home-btn client-btn">
             <span className="btn-icon">📺</span>
             <span className="btn-text">Vista Cliente (Pantalla)</span>
             <span className="btn-desc">Visualización en columnas</span>
-          </Link>
+          </button>
         </div>
       </div>
     </div>

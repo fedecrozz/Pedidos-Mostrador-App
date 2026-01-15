@@ -1,0 +1,25 @@
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos de distribución
+dist/
+dist-electron/
+
+# Ignorar base de datos de desarrollo
+*.db
+
+# Ignorar archivos temporales
+.DS_Store
+Thumbs.db
+
+# Ignorar logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar archivos de entorno
+.env
+.env.local
+
+# Ignorar caché de Electron
+.cache/

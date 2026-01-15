@@ -1,0 +1,44 @@
+{
+  "name": "pedidos-mostrador-app",
+  "version": "1.0.0",
+  "description": "Aplicación de Pedidos de Mostrador",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:frontend": "cd frontend && npm run build",
+    "build:win": "npm run build:frontend && electron-builder --win --config.win.sign=null",
+    "build:win:dir": "npm run build:frontend && electron-builder --win --dir",
+    "package:win": "npm run build:frontend && electron-packager . PedidosMostrador --platform=win32 --arch=x64 --out=dist --overwrite --ignore=\"^/node_modules$\" --ignore=\"^/frontend/node_modules$\" --ignore=\"^/frontend/src$\" --ignore=\"^/.git$\" --ignore=\"^/dist$\"",
+    "build:all": "npm run build:frontend && electron-builder -mwl",
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.pedidos.mostrador",
+    "productName": "Pedidos Mostrador",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron-main.js",
+      "backend/**/*",
+      "frontend/dist/**/*",
+      "pedidos.db.sql"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "build/icon.ico",
+      "sign": null
+    },
+    "portable": {
+      "artifactName": "PedidosMostrador.exe"
+    },
+    "electronVersion": "28.3.3"
+  }
+}
