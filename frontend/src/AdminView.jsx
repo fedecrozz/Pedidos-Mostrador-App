@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
+import { useAppConfig } from './useAppConfig'
 import './AdminView.css'
 
 // En Electron, el backend siempre corre en localhost:3001
 const API_URL = 'http://127.0.0.1:3001/api/pedidos';
 
 function AdminView() {
+  const config = useAppConfig();
   const [pedidos, setPedidos] = useState([]);
   const [nombreCliente, setNombreCliente] = useState('');
   const [numeroPedido, setNumeroPedido] = useState('');
@@ -160,10 +163,37 @@ function AdminView() {
     return <div className="loading">Cargando pedidos...</div>;
   }
 
+  const appStyle = {
+    background: `linear-gradient(135deg, ${config.colorFondoAdmin} 0%, ${config.colorFondoSecundarioAdmin} 100%)`
+  };
+
+  const headerStyle = {
+    background: config.colorEncabezadoAdmin
+  };
+
+  const titleStyle = {
+    color: config.colorTituloAdmin
+  };
+
+  const tableHeaderStyle = {
+    backgroundColor: config.colorEncabezadoTablaAdmin,
+    color: '#ffffff'
+  };
+
+  const btnCrearStyle = {
+    background: config.colorBotonCrear
+  };
+
   return (
-    <div className="app">
-      <header className="header">
-        <h1>📋 Administración de Pedidos</h1>
+    <div className="app" style={appStyle}>
+      <header className="header" style={headerStyle}>
+        {config.logoUrl && (
+          <div className="header-logo">
+            <img src={config.logoUrl} alt="Logo" />
+          </div>
+        )}
+        <h1 style={titleStyle}>📋 Administración de Pedidos</h1>
+        <Link to="/" className="btn-volver">← Volver al Menú</Link>
       </header>
 
       <div className="container">
@@ -186,7 +216,7 @@ function AdminView() {
             className="input-cliente"
             required
           />
-          <button type="submit" className="btn-crear">
+          <button type="submit" className="btn-crear" style={btnCrearStyle}>
             Crear Pedido
           </button>
         </form>
@@ -207,7 +237,7 @@ function AdminView() {
         <div className="tabla-container">
           <table className="tabla-pedidos">
             <thead>
-              <tr>
+              <tr style={tableHeaderStyle}>
                 <th onClick={() => handleOrdenar('numero_pedido')} className="sortable">
                   N° Pedido {ordenamiento.campo === 'numero_pedido' && (ordenamiento.direccion === 'asc' ? '↑' : '↓')}
                 </th>
@@ -269,6 +299,7 @@ function AdminView() {
                       <button
                         onClick={() => handleEliminarPedido(pedido.id)}
                         className="btn-eliminar"
+                        style={{ background: config.colorBotonEliminar }}
                         title="Eliminar pedido"
                       >
                         ✕

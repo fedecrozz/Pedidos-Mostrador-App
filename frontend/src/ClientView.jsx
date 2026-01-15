@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useAppConfig } from './useAppConfig'
 import './ClientView.css'
 
 // En Electron, el backend siempre corre en localhost:3001
 const API_URL = 'http://127.0.0.1:3001/api/pedidos';
 
 function ClientView() {
+  const config = useAppConfig();
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,13 +54,32 @@ function ClientView() {
     return <div className="loading">Cargando pedidos...</div>;
   }
 
+  const viewStyle = {
+    background: `linear-gradient(135deg, ${config.colorFondoPrincipal} 0%, ${config.colorFondoSecundario} 100%)`
+  };
+
+  const getEstadoColor = (estado) => {
+    switch (estado) {
+      case 'Pendiente de entrega':
+        return config.colorPendiente;
+      case 'En preparación':
+        return config.colorPreparacion;
+      case 'Listo para retirar':
+        return config.colorListo;
+      case 'Entregado':
+        return config.colorEntregado;
+      default:
+        return '#999';
+    }
+  };
+
   return (
-    <div className="client-view">
+    <div className="client-view" style={viewStyle}>
       <div className="container">
         {/* Tabla de pedidos */}
         <div className="tabla-container">
           <table className="tabla-pedidos-cliente">
-            <thead>
+            <thead style={{ background: `linear-gradient(135deg, ${config.colorFondoPrincipal}, ${config.colorFondoSecundario})` }}>
               <tr>
                 <th>N° Pedido</th>
                 <th>Cliente</th>
@@ -76,7 +97,10 @@ function ClientView() {
                     <td className="numero-pedido">{pedido.numero_pedido}</td>
                     <td className="cliente-nombre">{pedido.nombre_cliente}</td>
                     <td>
-                      <span className={`estado-badge ${getEstadoClass(pedido.estado)}`}>
+                      <span 
+                        className={`estado-badge ${getEstadoClass(pedido.estado)}`}
+                        style={{ background: getEstadoColor(pedido.estado) }}
+                      >
                         {pedido.estado}
                       </span>
                     </td>

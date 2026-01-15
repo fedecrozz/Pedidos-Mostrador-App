@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 
@@ -21,7 +21,10 @@ function createWindow() {
 
   // Manejar la apertura de nuevas ventanas
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    return {
+    // Determinar si es ClientView2 basándose en la URL
+    const isClientView2 = url.includes('clientview2');
+    
+    const newWindow = {
       action: 'allow',
       overrideBrowserWindowOptions: {
         width: 1200,
@@ -32,6 +35,15 @@ function createWindow() {
         }
       }
     };
+
+    return newWindow;
+  });
+
+  // Escuchar cuando se crea una nueva ventana para eliminar el menú si es ClientView2
+  mainWindow.webContents.on('did-create-window', (window, details) => {
+    if (details.url.includes('clientview2')) {
+      window.setMenu(null);
+    }
   });
 
   // En desarrollo, carga desde el servidor de Vite
