@@ -119,6 +119,10 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .filtro-checkbox {
@@ -139,6 +143,29 @@ body {
   font-size: 1rem;
   color: #333;
   font-weight: 500;
+}
+
+.btn-eliminar-entregados {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.btn-eliminar-entregados:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-eliminar-entregados:active {
+  transform: translateY(0);
 }
 
 /* Tabla de pedidos */

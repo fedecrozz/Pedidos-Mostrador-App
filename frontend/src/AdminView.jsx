@@ -55,7 +55,7 @@ function AdminView() {
   // Crear nuevo pedido
   const handleCrearPedido = async (e) => {
     e.preventDefault();
-    if (!nombreCliente.trim() || !numeroPedido.trim()) return;
+    if (!numeroPedido.trim()) return;
 
     try {
       const response = await fetch(API_URL, {
@@ -63,7 +63,7 @@ function AdminView() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           nombre_cliente: nombreCliente, 
-          estado: 'Pendiente de entrega',
+          estado: 'En preparación',
           numero_pedido: numeroPedido
         })
       });
@@ -116,6 +116,28 @@ function AdminView() {
       fetchPedidos();
     } catch (error) {
       console.error('Error al eliminar pedido:', error);
+    }
+  };
+
+  // Eliminar todos los pedidos entregados
+  const handleEliminarEntregados = async () => {
+    const entregados = pedidos.filter(p => p.estado === 'Entregado');
+    
+    if (entregados.length === 0) {
+      alert('No hay pedidos entregados para eliminar');
+      return;
+    }
+
+    if (!confirm(`¿Estás seguro de eliminar ${entregados.length} pedido(s) entregado(s)?`)) return;
+
+    try {
+      await fetch('http://127.0.0.1:3001/api/pedidos/entregados/todos', {
+        method: 'DELETE'
+      });
+      fetchPedidos();
+    } catch (error) {
+      console.error('Error al eliminar pedidos entregados:', error);
+      alert('Error al eliminar pedidos entregados');
     }
   };
 
@@ -214,7 +236,6 @@ function AdminView() {
             value={nombreCliente}
             onChange={(e) => setNombreCliente(e.target.value)}
             className="input-cliente"
-            required
           />
           <button type="submit" className="btn-crear" style={btnCrearStyle}>
             Crear Pedido
@@ -231,6 +252,13 @@ function AdminView() {
             />
             <span>Ocultar pedidos Entregados</span>
           </label>
+          <button 
+            onClick={handleEliminarEntregados}
+            className="btn-eliminar-entregados"
+            title="Eliminar todos los pedidos entregados"
+          >
+            🗑️ Eliminar Entregados
+          </button>
         </div>
 
         {/* Tabla de pedidos */}

@@ -24,7 +24,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     db.run(`CREATE TABLE IF NOT EXISTS pedidos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       numero_pedido TEXT NOT NULL,
-      nombre_cliente TEXT NOT NULL,
+      nombre_cliente TEXT,
       estado TEXT NOT NULL,
       fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
     )`, (err) => {
@@ -111,6 +111,17 @@ app.put('/api/pedidos/:id', (req, res) => {
 // Eliminar un pedido
 app.delete('/api/pedidos/:id', (req, res) => {
   db.run('DELETE FROM pedidos WHERE id = ?', [req.params.id], function (err) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ deleted: this.changes });
+    }
+  });
+});
+
+// Eliminar todos los pedidos entregados
+app.delete('/api/pedidos/entregados/todos', (req, res) => {
+  db.run('DELETE FROM pedidos WHERE estado = ?', ['Entregado'], function (err) {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {

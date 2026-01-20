@@ -24,7 +24,7 @@ db.run(`
   CREATE TABLE pedidos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     numero_pedido TEXT NOT NULL,
-    nombre_cliente TEXT NOT NULL,
+    nombre_cliente TEXT,
     estado TEXT NOT NULL,
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
   )
