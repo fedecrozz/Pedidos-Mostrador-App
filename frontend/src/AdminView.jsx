@@ -31,7 +31,10 @@ function AdminView() {
 
   const obtenerSiguienteNumero = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:3001/api/pedidos/ultimo-numero');
+      const baseURL = isElectron 
+        ? 'http://127.0.0.1:3001'
+        : (import.meta.env.VITE_API_URL || 'https://app-mostrador-backend.vercel.app');
+      const response = await fetch(`${baseURL}/api/pedidos/ultimo-numero`);
       const data = await response.json();
       setNumeroPedido(data.siguienteNumero.toString());
     } catch (error) {
@@ -131,7 +134,10 @@ function AdminView() {
     if (!confirm(`¿Estás seguro de eliminar ${entregados.length} pedido(s) entregado(s)?`)) return;
 
     try {
-      await fetch('http://127.0.0.1:3001/api/pedidos/entregados/todos', {
+      const baseURL = isElectron 
+        ? 'http://127.0.0.1:3001'
+        : (import.meta.env.VITE_API_URL || 'https://app-mostrador-backend.vercel.app');
+      await fetch(`${baseURL}/api/pedidos/entregados/todos`, {
         method: 'DELETE'
       });
       fetchPedidos();

@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import { useAppConfig } from './useAppConfig'
 import './ClientView2.css'
 
-// En Electron, el backend siempre corre en localhost:3001
-const API_URL = 'http://127.0.0.1:3001/api/pedidos';
+// Detectar si estamos en Electron o en la web
+const isElectron = window.electron !== undefined;
+const API_URL = isElectron 
+  ? 'http://127.0.0.1:3001/api/pedidos'
+  : (import.meta.env.VITE_API_URL || 'https://app-mostrador-backend.vercel.app') + '/api/pedidos';
 
 function ClientView2() {
   const config = useAppConfig();

@@ -3,9 +3,18 @@ const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// Configuración CORS para permitir solicitudes desde el frontend desplegado
+app.use(cors({
+  origin: [
+    'https://app-mostrador.vercel.app',
+    'https://app-mostrador-4x5kzej5r-fedecrozz-projects.vercel.app',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Conexión a la base de datos
@@ -130,6 +139,12 @@ app.delete('/api/pedidos/entregados/todos', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor backend escuchando en puerto ${PORT}`);
-});
+// Exportar para Vercel (funciones serverless)
+module.exports = app;
+
+// Solo ejecutar el servidor en desarrollo local
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor backend escuchando en puerto ${PORT}`);
+  });
+}
